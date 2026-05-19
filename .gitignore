@@ -8,3 +8,4 @@ state.json
 venv/
 .venv/
 *.egg-info/
+.claude/settings.local.json
