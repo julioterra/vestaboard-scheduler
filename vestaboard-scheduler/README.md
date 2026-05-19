@@ -9,7 +9,7 @@ dependencies. Only `requests` and `python-dotenv` are required.
 ## Setup
 
 ```bash
-cd vestboard-scheduler
+cd vestaboard-scheduler
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -50,7 +50,7 @@ python preview.py next   # peek at the next scheduled quote
 Add this to your crontab (`crontab -e`):
 
 ```cron
-*/30 8-19 * * * /absolute/path/to/venv/bin/python /absolute/path/to/vestboard-scheduler/main.py
+*/30 8-19 * * * /absolute/path/to/venv/bin/python /absolute/path/to/vestaboard-scheduler/main.py
 ```
 
 This fires every 30 minutes between 08:00 and 19:30, giving the last cycle
@@ -84,7 +84,7 @@ the rotation.
 ## Project files
 
 ```
-vestboard-scheduler/
+vestaboard-scheduler/
 ├── main.py          # cron entry point
 ├── scheduler.py     # cycle logic and source dispatch
 ├── quotes.py        # CSV loader, shuffle state, word wrap
