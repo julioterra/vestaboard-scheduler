@@ -60,7 +60,8 @@ Do not create files outside this structure without flagging it first.
 
 ## API behaviour
 
-- All messages sent as character arrays via `POST https://cloud.vestaboard.com/`
+- Messages sent as character arrays via `POST https://rw.vestaboard.com/` with header `X-Vestaboard-Read-Write-Key: <key>` (Vestaboard Read/Write API)
+- The Read/Write API key is a 32-character hex token (no dashes), generated from the board settings on `web.vestaboard.com`
 - Quotes formatted via VBML (`POST https://vbml.vestaboard.com/compose`) before sending — VBML returns the character array
 - VBML requires no authentication
 - Respect the rate limit: no more than 1 message every 15 seconds
