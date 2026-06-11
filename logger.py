@@ -26,13 +26,13 @@ def log_quote(text):
     _write("QUOTE", text)
 
 
-def log_wave(freq, amp, phase, palette):
-    """Log a sent wave frame with its parameters."""
-    content = (
-        f"[graphic: wave_frame] freq={freq:.2f} amp={amp:.2f} "
-        f"phase={phase:.2f} palette={palette}"
-    )
-    _write("WAVE", content)
+def log_wave(pattern, palette, detail=""):
+    """Log a sent pattern frame with its name and parameters."""
+    parts = [f"[graphic: {pattern}_frame]"]
+    if detail:
+        parts.append(detail)
+    parts.append(f"palette={palette}")
+    _write("WAVE", " ".join(parts))
 
 
 def log_warning(message):

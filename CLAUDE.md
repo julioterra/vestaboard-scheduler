@@ -83,10 +83,13 @@ Do not create files outside this structure without flagging it first.
 
 ## Wave interstitials
 
-- Procedurally generated sine wave mapped to 6×22 grid
+- Procedurally generated patterns mapped to the 6×22 grid
+- `waves.py` holds a `PATTERNS` registry of pattern generators; `generate_wave()` picks one at random (or by name). Current patterns: `sine`, `plasma`
+- Each generator returns `(grid, params)` where `params` has a uniform shape: `pattern` (name), `palette` (colours used), `detail` (random-params string for logging)
+- Add a new pattern by writing a generator that returns that shape and registering it in `PATTERNS`
 - Use only `math` from the standard library — no numpy
-- Randomize each time: frequency, amplitude, phase offset, color palette
-- Colors limited to Vestaboard color codes: 63 (red), 64 (orange), 65 (yellow), 66 (green), 67 (blue), 68 (violet)
+- Single-frame only — no animation (see Out of scope)
+- Randomize each time; colours limited to Vestaboard codes: 63 (red), 64 (orange), 65 (yellow), 66 (green), 67 (blue), 68 (violet)
 - Output is a 6×22 nested list of integers
 
 ---
@@ -96,7 +99,7 @@ Do not create files outside this structure without flagging it first.
 - Location: `logs/YYYY-Www.log` (ISO week numbering, auto-created)
 - Format: `[YYYY-MM-DD HH:MM:SS] TYPE   | CONTENT`
 - Quote entry: full quote text
-- Wave entry: `[graphic: wave_frame] freq={f:.2f} amp={a:.2f} phase={p:.2f} palette={colors}`
+- Wave entry: `[graphic: {pattern}_frame] {detail} palette={colors}` (e.g. `[graphic: plasma_frame] fx=0.34 ... palette=[64, 65, 66]`)
 - Error entry: error message, status code, and response body
 
 ---

@@ -71,13 +71,14 @@ def cmd_quote(args):
     render_quote(" ".join(args))
 
 
-def cmd_wave(_args):
-    grid, params = waves.generate_wave()
+def cmd_wave(args):
+    name = args[0] if args else None
+    if name is not None and name not in waves.PATTERNS:
+        print(f"Unknown pattern '{name}'. Choices: {', '.join(waves.PATTERNS)}")
+        sys.exit(1)
+    grid, params = waves.generate_wave(name)
     _print_grid(grid, _render_color_cell)
-    print(
-        f"freq={params['freq']:.2f} amp={params['amp']:.2f} "
-        f"phase={params['phase']:.2f} palette={params['palette']}"
-    )
+    print(f"pattern={params['pattern']} {params['detail']} palette={params['palette']}")
 
 
 def cmd_next(_args):
@@ -97,7 +98,7 @@ def main(argv):
     if len(argv) < 2 or argv[1] not in COMMANDS:
         print("Usage:")
         print('  preview.py quote "Your text"')
-        print("  preview.py wave")
+        print("  preview.py wave [pattern]   # pattern: sine | plasma (random if omitted)")
         print("  preview.py next")
         sys.exit(1)
     COMMANDS[argv[1]](argv[2:])
