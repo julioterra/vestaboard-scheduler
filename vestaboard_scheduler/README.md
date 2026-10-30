@@ -51,7 +51,7 @@ overnight.
 Open Terminal and `cd` into the project folder:
 
 ```bash
-cd "/path/to/vestaboard"
+cd "/path/to/vestaboard/vestaboard_scheduler"
 ```
 
 (Adjust the path if you've moved the folder.)
@@ -206,7 +206,7 @@ designed to be cross-platform.
    ```
 
    The first prints the path to the venv's Python (something like
-   `/Users/you/.../vestaboard/venv/bin/python`). The second
+   `/Users/you/.../vestaboard_scheduler/venv/bin/python`). The second
    prints the project folder.
 
 2. Open your crontab in an editor:
@@ -224,7 +224,7 @@ designed to be cross-platform.
    `pwd` printed — the third path is just `pwd` + `/logs/cron.err`):
 
    ```cron
-   */30 8-19 * * * /absolute/path/to/venv/bin/python /absolute/path/to/vestaboard/main.py >> /absolute/path/to/vestaboard/logs/cron.err 2>&1
+   */30 8-19 * * * /absolute/path/to/vestaboard_scheduler/venv/bin/python /absolute/path/to/vestaboard_scheduler/main.py >> /absolute/path/to/vestaboard_scheduler/logs/cron.err 2>&1
    ```
 
    The `>> .../logs/cron.err 2>&1` part captures any errors cron itself
@@ -290,7 +290,7 @@ Symptom: `crontab -l` shows your job, the half-hour ticks come and go, but
 `logs/YYYY-Www.log` doesn't get any new entries.
 
 Most likely cause: **cron is using the wrong Python.** This project's
-dependencies (`requests`, `python-dotenv`) live inside `vestaboard/venv/`.
+dependencies (`requests`, `python-dotenv`) live inside `vestaboard_scheduler/venv/`.
 If your crontab points at a different Python — say, a venv in your home
 folder, or system Python — that interpreter won't have those packages
 installed, and the script will crash on `import requests` before it can
@@ -320,12 +320,12 @@ If you set the schedule to fire at 8 AM and your Mac doesn't wake until
 
 ### Paths with spaces
 
-This project lives under `Documents/3. Resources/vestaboard/...` — the space
+This project lives under `Documents/3. Resources/vestaboard/vestaboard_scheduler/...` — the space
 in `3. Resources` will break a crontab line if you don't quote it. Wrap any
 path that contains a space in single quotes, e.g.:
 
 ```cron
-'/Users/you/Documents/3. Resources/vestaboard/main.py'
+'/Users/you/Documents/3. Resources/vestaboard/vestaboard_scheduler/main.py'
 ```
 
 ---
@@ -364,7 +364,7 @@ the rotation.
 ## Project files
 
 ```
-vestaboard/
+vestaboard_scheduler/
 ├── main.py          # cron entry point
 ├── scheduler.py     # cycle logic and source dispatch
 ├── quotes.py        # CSV loader, shuffle state, word wrap

@@ -29,21 +29,24 @@ A lightweight Python scheduler that cycles quotes and wave interstitials on a Ve
 ## Project structure
 
 ```
-vestaboard/
-├── main.py              # Entry point, main scheduler loop
-├── scheduler.py         # Timing logic, 8am–8pm guard, cycle management
-├── quotes.py            # Quote loader, shuffle-cycle logic, word wrapping
-├── waves.py             # Wave pattern generator → 6×22 character array
-├── vestaboard.py        # API client (send_characters)
-├── logger.py            # Weekly log file handler
-├── preview.py           # CLI preview tool (terminal ANSI output)
-├── quotes.csv           # User-maintained quote list (plain text, one per row)
-├── state.json           # Shuffle state — persists between cron runs (auto-generated)
-├── .env                 # VESTABOARD_API_KEY (never commit)
-├── .env.example         # Template for .env
-├── logs/                # Weekly log files (YYYY-Www.log)
-├── requirements.txt
-└── README.md
+vestaboard/                  # Repo root
+├── CLAUDE.md
+├── .gitignore
+└── vestaboard_scheduler/    # App top-level folder; run all commands from here
+    ├── main.py              # Entry point, main scheduler loop
+    ├── scheduler.py         # Timing logic, 8am–8pm guard, cycle management
+    ├── quotes.py            # Quote loader, shuffle-cycle logic, word wrapping
+    ├── waves.py             # Wave pattern generator → 6×22 character array
+    ├── vestaboard.py        # API client (send_characters)
+    ├── logger.py            # Weekly log file handler
+    ├── preview.py           # CLI preview tool (terminal ANSI output)
+    ├── quotes.csv           # User-maintained quote list (plain text, one per row)
+    ├── state.json           # Shuffle state — persists between cron runs (auto-generated)
+    ├── .env                 # VESTABOARD_API_KEY (never commit)
+    ├── .env.example         # Template for .env
+    ├── logs/                # Weekly log files (YYYY-Www.log)
+    ├── requirements.txt
+    └── README.md
 ```
 
 Do not create files outside this structure without flagging it first.
