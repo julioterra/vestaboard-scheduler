@@ -109,6 +109,16 @@ VESTABOARD_API_KEY=your_32_character_hex_key_here
 
 Save and close. **Don't commit `.env` to git** — it's already in `.gitignore`.
 
+### 5. Create the logs folder
+
+```bash
+mkdir -p logs
+```
+
+The script creates `logs/` on its own, but the cron line below redirects
+errors into `logs/cron.err` *before* the script starts. If the folder
+doesn't exist yet, that redirect fails and cron never runs the script.
+
 ---
 
 ## Test it without sending to the board
@@ -272,7 +282,7 @@ Full Disk Access to `cron`:
 - List your crontab: `crontab -l`
 - After the next half-hour mark, check that the log file updated:
   `ls -lt logs/` should show a recent timestamp.
-- Watch the live log: `tail -f logs/$(date +%Y-W%V).log`
+- Watch the live log: `tail -f logs/$(date +%G-W%V).log`
 
 ### Stop / change / remove the cron job
 
@@ -320,12 +330,12 @@ If you set the schedule to fire at 8 AM and your Mac doesn't wake until
 
 ### Paths with spaces
 
-This project lives under `Documents/3. Resources/vestaboard/vestaboard_scheduler/...` — the space
-in `3. Resources` will break a crontab line if you don't quote it. Wrap any
-path that contains a space in single quotes, e.g.:
+If the folder you cloned into has a space anywhere in its path (e.g.
+`Documents/My Projects/...`), the crontab line will break unless you quote
+it. Wrap every path that contains a space in single quotes:
 
 ```cron
-'/Users/you/Documents/3. Resources/vestaboard/vestaboard_scheduler/main.py'
+*/30 8-19 * * * '/Users/you/My Projects/vestaboard_scheduler/venv/bin/python' '/Users/you/My Projects/vestaboard_scheduler/main.py' >> '/Users/you/My Projects/vestaboard_scheduler/logs/cron.err' 2>&1
 ```
 
 ---
