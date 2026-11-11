@@ -18,15 +18,25 @@ The scheduler is a small Python script. Each time it runs, it performs one
 
 Then the script exits. A scheduler called **cron** (built into macOS and
 Linux) starts the script again every 30 minutes between 8 AM and 8 PM. So you
-get a new quote every half hour with a brief wave animation in between.
+get a new quote every half hour with a brief colourful wave pattern in between.
 
 Quotes come from `quotes.csv` — a plain text file you can edit, one quote per
 row. The script shuffles the full list, then cycles through it completely
 before reshuffling. The shuffle position is saved to `state.json` so quotes
 don't repeat across runs.
 
-Waves are procedurally generated sine patterns mapped to the 6×22 grid using
-six Vestaboard colours (red, orange, yellow, green, blue, violet).
+Waves are procedurally generated, single-frame patterns mapped to the 6×22
+grid using six Vestaboard colours (red, orange, yellow, green, blue, violet).
+Each cycle picks one of two patterns at random, with fresh random parameters
+every time:
+
+- **Sine** — a single sine line across the board, with each cell coloured by
+  its distance from the line. Frequency, amplitude, phase, and a 3–5 colour
+  palette are randomized.
+- **Plasma** — a smooth 2D colour field built from four summed sine waves
+  (horizontal, vertical, diagonal, and radial from a random centre point).
+  Uses a contiguous 4–6 colour slice of the rainbow, so neighbouring cells
+  blend like a gradient.
 
 Outside of 8 AM – 8 PM the script exits immediately, so the board stays quiet
 overnight.
@@ -131,11 +141,13 @@ Make sure the venv is active (`source venv/bin/activate`), then try:
 ```bash
 python preview.py quote "Hello from the Vestaboard"
 python preview.py wave
+python preview.py wave plasma
 python preview.py next
 ```
 
 - `quote "..."` — shows how a given quote would look on the board
-- `wave` — generates a random wave pattern and renders it
+- `wave [pattern]` — generates and renders a wave frame. Pass `sine` or
+  `plasma` to pick a pattern; omit it to choose one at random
 - `next` — shows what the *next* scheduled quote would be, based on the
   current shuffle state in `state.json`
 
@@ -350,7 +362,9 @@ Example:
 
 ```
 [2026-05-19 14:00:03] QUOTE  | The only way to do great work is to love what you do.
-[2026-05-19 14:29:18] WAVE   | [graphic: wave_frame] freq=0.42 amp=2.10 phase=1.55 palette=[66, 67, 68]
+[2026-05-19 14:29:18] WAVE   | [graphic: sine_frame] freq=0.42 amp=2.10 phase=1.55 palette=[66, 67, 68]
+[2026-05-19 14:30:04] QUOTE  | Simplicity is the ultimate sophistication.
+[2026-05-19 14:59:19] WAVE   | [graphic: plasma_frame] fx=0.34 fy=0.51 fd=0.22 fr=0.47 palette=[64, 65, 66, 67]
 ```
 
 ---
@@ -371,6 +385,36 @@ the rotation.
 
 ---
 
+## Adding a new wave pattern
+
+Patterns live in the `PATTERNS` registry in `waves.py`. A pattern is a
+zero-arg function that returns `(grid, params)`:
+
+- `grid` — a 6×22 nested list of Vestaboard colour codes (63–68)
+- `params` — a dict with `pattern` (name), `palette` (colours used), and
+  `detail` (a short string of the random parameters, for the log)
+
+```python
+# waves.py
+def generate_stripes():
+    palette = _rainbow_slice(4)
+    grid = [[palette[(row + col) % len(palette)] for col in range(COLS)]
+            for row in range(ROWS)]
+    return grid, {"pattern": "stripes", "palette": palette, "detail": ""}
+
+
+PATTERNS = {
+    "sine": generate_sine,
+    "plasma": generate_plasma,
+    "stripes": generate_stripes,
+}
+```
+
+Once registered, the scheduler picks it up in the random rotation and you
+can preview it with `python preview.py wave stripes`.
+
+---
+
 ## Project files
 
 ```
@@ -378,7 +422,7 @@ vestaboard_scheduler/
 ├── main.py          # cron entry point
 ├── scheduler.py     # cycle logic and source dispatch
 ├── quotes.py        # CSV loader, shuffle state, word wrap
-├── waves.py         # sine-wave frame generator
+├── waves.py         # wave pattern generators (sine, plasma)
 ├── vestaboard.py    # API client (send + VBML)
 ├── logger.py        # weekly log file writer
 ├── preview.py       # CLI preview tool
