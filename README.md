@@ -51,10 +51,10 @@ overnight.
 Open Terminal and `cd` into the project folder:
 
 ```bash
-cd "/path/to/vestaboard/vestaboard_scheduler"
+cd /path/to/vestaboard_scheduler
 ```
 
-(Adjust the path if you've moved the folder.)
+(Replace the path with wherever you cloned the repo.)
 
 ### 1. Create a virtual environment
 
@@ -375,8 +375,15 @@ vestaboard_scheduler/
 ├── quotes.csv       # user-editable quote list
 ├── .env.example     # template for your API key
 ├── requirements.txt
+├── LICENSE
 └── README.md
 ```
 
 `state.json`, `logs/`, `.env`, and `venv/` are created locally and are
 gitignored.
+
+---
+
+## License
+
+Released under the [MIT License](LICENSE).
